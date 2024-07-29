@@ -1,5 +1,6 @@
 package acastro.ecommerce.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,9 @@ import acastro.ecommerce.repository.ProductRepository;
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
 
-    private final Product PRODUCT = new Product(1L, "Product 1", "Description 1", 10.0, 10, false);
+    private static final BigDecimal UNIT_PRICE = BigDecimal.valueOf(10.0);
+
+    private final Product PRODUCT = new Product(1L, "Product 1", "Description 1", UNIT_PRICE, 10, false);
 
     @Mock
     private ProductRepository productRepository;
@@ -49,8 +52,8 @@ class ProductServiceImplTest {
     @Test
     void createProduct() {
         Long createdId = 33L;
-        Product newProduct = new Product(null, "New product 1", "123213", 10.0, 10, false);
-        Product expectedResponse = new Product(createdId, "New product 1", "123213", 10.0, 10, false);
+        Product newProduct = new Product(null, "New product 1", "123213", UNIT_PRICE, 10, false);
+        Product expectedResponse = new Product(createdId, "New product 1", "123213", UNIT_PRICE, 10, false);
 
         Mockito.when(productRepository.save(newProduct)).thenAnswer(invocation -> {
             Product save = invocation.getArgument(0);
@@ -65,12 +68,13 @@ class ProductServiceImplTest {
 
     @Test
     void updateProduct() {
-        Product productNewData = new Product(null, "Updated name", "123213", 99.9, 250, false);
+        BigDecimal newPrice = BigDecimal.valueOf(99.9);
+        Product productNewData = new Product(null, "Updated name", "123213", newPrice, 250, false);
 
         Mockito.when(productRepository.findById(PRODUCT.getId())).thenReturn(Optional.of(PRODUCT));
         Mockito.when(productRepository.save(PRODUCT)).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Product expectedResponse = new Product(PRODUCT.getId(), "Updated name", "123213", 99.9, 250, false);
+        Product expectedResponse = new Product(PRODUCT.getId(), "Updated name", "123213", newPrice, 250, false);
 
         Product response = productService.updateProduct(PRODUCT.getId(), productNewData);
 
@@ -79,7 +83,7 @@ class ProductServiceImplTest {
 
     @Test
     void updateProduct_notFound() {
-        Product productNewData = new Product(null, "Updated name", "123213", 99.9, 250, false);
+        Product productNewData = new Product(null, "Updated name", "123213", UNIT_PRICE, 250, false);
 
         Mockito.when(productRepository.findById(PRODUCT.getId())).thenReturn(Optional.empty());
 
@@ -90,7 +94,7 @@ class ProductServiceImplTest {
 
     @Test
     void deleteProduct() {
-        Product toDelete = new Product(1L, "Product 1", "Description 1", 10.0, 10, false);
+        Product toDelete = new Product(1L, "Product 1", "Description 1", UNIT_PRICE, 10, false);
         Mockito.when(productRepository.findById(PRODUCT.getId())).thenReturn(Optional.of(toDelete));
         Mockito.when(productRepository.save(toDelete)).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -104,7 +108,7 @@ class ProductServiceImplTest {
 
     @Test
     void deleteProduct_discontinued() {
-        Product toDelete = new Product(1L, "Product 1", "Description 1", 10.0, 10, true);
+        Product toDelete = new Product(1L, "Product 1", "Description 1", UNIT_PRICE, 10, true);
         Mockito.when(productRepository.findById(toDelete.getId())).thenReturn(Optional.of(toDelete));
 
         Assertions.assertFalse(productService.deleteProduct(toDelete.getId()));

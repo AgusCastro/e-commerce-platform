@@ -1,5 +1,6 @@
 package acastro.ecommerce.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +22,9 @@ import acastro.ecommerce.service.ProductService;
 @ExtendWith(MockitoExtension.class)
 class ProductControllerTest {
 
-    private final Product PRODUCT = new Product(1L, "Product 1", "Description 1", 10.0, 10, true);
+    private static final BigDecimal UNIT_PRICE = BigDecimal.valueOf(10.0);
+
+    private final Product PRODUCT = new Product(1L, "Product 1", "Description 1", UNIT_PRICE, 10, true);
 
     @Mock
     private ProductService productService;
@@ -31,8 +34,9 @@ class ProductControllerTest {
 
     @Test
     void getProducts() {
+        BigDecimal secondPrice = BigDecimal.valueOf(20.0);
         List<Product> products = List.of(PRODUCT,
-                new Product(2L, "Product 2", "Description 2", 20.0, 10, true));
+                new Product(2L, "Product 2", "Description 2", secondPrice, 10, true));
         Mockito.when(productService.getAllProducts()).thenReturn(products);
         List<ProductResponseDto> expectedResponse = products.stream().map(ProductMapper.mapper::toDto).toList();
 
@@ -66,12 +70,13 @@ class ProductControllerTest {
 
     @Test
     void createProduct() {
-        Product product = new Product(null, "Product 3", "Description 3", 30.0, 10, true);
+        BigDecimal newPrice = BigDecimal.valueOf(30.0);
+        Product product = new Product(null, "Product 3", "Description 3", newPrice, 10, true);
         ProductResponseDto expectedResponse = ProductMapper.mapper.toDto(product);
         Mockito.when(productService.createProduct(Mockito.any(Product.class))).thenReturn(product);
 
         ProductResponseDto response = productController.createProduct(
-                new ProductRequestDto(product.getName(), product.getDescription(), product.getPrice(), product.getStock())
+                new ProductRequestDto(product.getName(), product.getDescription(), product.getPrice().doubleValue(), product.getStock())
         );
 
         Assertions.assertEquals(expectedResponse, response);
@@ -81,12 +86,13 @@ class ProductControllerTest {
 
     @Test
     void updateProduct() {
-        Product product = new Product(PRODUCT.getId(), "Product 3", "Description 3", 30.0, 10, true);
+        BigDecimal newPrice = BigDecimal.valueOf(30.0);
+        Product product = new Product(PRODUCT.getId(), "Product 3", "Description 3", newPrice, 10, true);
         ProductResponseDto expectedResponse = ProductMapper.mapper.toDto(product);
         Mockito.when(productService.updateProduct(Mockito.eq(PRODUCT.getId()), Mockito.any(Product.class))).thenReturn(product);
 
         ProductResponseDto response = productController.updateProduct(PRODUCT.getId(),
-                new ProductRequestDto(product.getName(), product.getDescription(), product.getPrice(), product.getStock()));
+                new ProductRequestDto(product.getName(), product.getDescription(), product.getPrice().doubleValue(), product.getStock()));
 
         Assertions.assertEquals(expectedResponse, response);
 

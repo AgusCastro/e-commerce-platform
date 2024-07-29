@@ -1,5 +1,6 @@
 package acastro.ecommerce.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +25,8 @@ import acastro.ecommerce.service.OrderItemService;
 @ExtendWith(MockitoExtension.class)
 class OrderItemControllerTest {
 
-    private final Product PRODUCT = new Product(1L, "Product 1", "", 100.0, 2, false);
+    private static final BigDecimal UNIT_PRICE = BigDecimal.valueOf(10.1);
+    private final Product PRODUCT = new Product(1L, "Product 1", "", BigDecimal.valueOf(100), 2, false);
     private final Long ORDER_ID = 1L;
     private final Order order = Mockito.mock(Order.class);
 
@@ -42,10 +44,10 @@ class OrderItemControllerTest {
 
     @Test
     void getOrderItems() {
-        Product customProduct = new Product(222L, "Product 2", "", 20.0, 2, false);
+        Product customProduct = new Product(222L, "Product 2", "", BigDecimal.valueOf(20), 2, false);
 
-        List<OrderItem> orderItems = List.of(new OrderItem(22L, PRODUCT, order, 1, 10.1),
-                new OrderItem(33L, customProduct, order, 4, 10.1));
+        List<OrderItem> orderItems = List.of(new OrderItem(22L, PRODUCT, order, 1, UNIT_PRICE),
+                new OrderItem(33L, customProduct, order, 4, UNIT_PRICE));
         Mockito.when(orderItemService.getAllOrderItems()).thenReturn(orderItems);
 
         List<OrderItemResponseDto> response = orderItemController.getOrderItems();
@@ -56,7 +58,7 @@ class OrderItemControllerTest {
 
     @Test
     void getOrderItem() {
-        OrderItem orderItem = new OrderItem(22L, PRODUCT, order, 1, 10.1);
+        OrderItem orderItem = new OrderItem(22L, PRODUCT, order, 1, UNIT_PRICE);
 
         Mockito.when(orderItemService.getOrderItemById(1L)).thenReturn(Optional.of(orderItem));
 
@@ -79,7 +81,7 @@ class OrderItemControllerTest {
     @Test
     void createOrderItem() {
         OrderItemRequestDto requestDto = new OrderItemRequestDto(ORDER_ID, 1L, 10);
-        OrderItem orderItem = new OrderItem(22L, PRODUCT, order, 10, 50.00);
+        OrderItem orderItem = new OrderItem(22L, PRODUCT, order, 10, BigDecimal.valueOf(50.00));
 
         Mockito.when(orderItemService.createOrderItem(requestDto.orderId(), requestDto.productId(), requestDto.quantity())).thenReturn(orderItem);
 
@@ -93,7 +95,7 @@ class OrderItemControllerTest {
     void updateOrderItem() {
         OrderItemUpdateRequestDto updateRequestDto = new OrderItemUpdateRequestDto(25);
 
-        OrderItem updatedOrderItem = new OrderItem(22L, PRODUCT, order, 25, 50.00);
+        OrderItem updatedOrderItem = new OrderItem(22L, PRODUCT, order, 25, BigDecimal.valueOf(50));
         Mockito.when(orderItemService.updateOrderItem(1L, updateRequestDto.quantity())).thenReturn(updatedOrderItem);
 
         OrderItemResponseDto response = orderItemController.updateOrderItem(1L, updateRequestDto);

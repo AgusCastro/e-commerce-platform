@@ -1,5 +1,6 @@
 package acastro.ecommerce.controller;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +65,7 @@ class OrderControllerTest {
                 "test2",
                 OrderStatus.DELIVERED,
                 new ArrayList<>());
-        order2.getItems().add(new OrderItem(123L, product1, order2, 2, 12.2));
+        order2.getItems().add(new OrderItem(123L, product1, order2, 2, BigDecimal.valueOf(12.2)));
 
         final List<Order> orderList = List.of(order1, order2);
 
@@ -94,7 +95,7 @@ class OrderControllerTest {
                 "test2",
                 OrderStatus.DELIVERED,
                 new ArrayList<>());
-        order.getItems().add(new OrderItem(123L, product, order, 2, 12.2));
+        order.getItems().add(new OrderItem(123L, product, order, 2, BigDecimal.valueOf(12.2)));
 
         Mockito.when(orderService.getOrderById(orderId)).thenReturn(Optional.of(order));
         final OrderResponseDto expectedResponse = OrderMapper.mapper.toDto(order);

@@ -1,5 +1,7 @@
 package acastro.ecommerce.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,10 +40,10 @@ public class OrderItem {
     private Integer quantity;
 
     @Column(name = ColumNames.UNIT_PRICE)
-    private Double unitPrice;
+    private BigDecimal unitPrice;
 
-    public Double getTotal() {
-        return this.unitPrice * this.quantity;
+    public BigDecimal getTotal() {
+        return this.unitPrice.multiply(BigDecimal.valueOf(this.quantity));
     }
 
     static final class ColumNames {

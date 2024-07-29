@@ -1,5 +1,7 @@
 package acastro.ecommerce.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,7 +39,7 @@ public class Product {
 
     @Column(name = ColumNames.PRICE, nullable = false, precision = 2)
     @EqualsAndHashCode.Include
-    private Double price;
+    private BigDecimal price;
 
     @Column(name = ColumNames.STOCK, nullable = false)
     @EqualsAndHashCode.Include

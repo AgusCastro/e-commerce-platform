@@ -1,5 +1,6 @@
 package acastro.ecommerce.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,10 @@ import acastro.ecommerce.repository.ProductRepository;
 @ExtendWith(MockitoExtension.class)
 class OrderItemServiceImplTest {
 
+    private static final BigDecimal DEFAULT_PRICE = BigDecimal.valueOf(4.0);
+
+    private final Integer DEFAULT_QUANTITY = 5;
+
     @Mock
     private OrderItemRepository orderItemRepository;
 
@@ -43,7 +48,7 @@ class OrderItemServiceImplTest {
         Product product = Mockito.mock(Product.class);
         Order order = Mockito.mock(Order.class);
 
-        OrderItem orderItem = new OrderItem(1L, product, order, 5, 4.0);
+        OrderItem orderItem = new OrderItem(1L, product, order, DEFAULT_QUANTITY, DEFAULT_PRICE);
 
         List<OrderItem> expectedResponse = List.of(orderItem);
 
@@ -61,7 +66,7 @@ class OrderItemServiceImplTest {
         Product product = Mockito.mock(Product.class);
         Order order = Mockito.mock(Order.class);
 
-        OrderItem orderItem = new OrderItem(1L, product, order, 5, 4.0);
+        OrderItem orderItem = new OrderItem(1L, product, order, DEFAULT_QUANTITY, DEFAULT_PRICE);
 
         Mockito.when(orderItemRepository.getOrderItemById(1L)).thenReturn(Optional.of(orderItem));
 
@@ -173,7 +178,7 @@ class OrderItemServiceImplTest {
                 .thenReturn(Optional.empty());
         Product product = Mockito.mock(Product.class);
         Mockito.when(product.getStock()).thenReturn(10);
-        Mockito.when(product.getPrice()).thenReturn(4.0);
+        Mockito.when(product.getPrice()).thenReturn(DEFAULT_PRICE);
 
         Order order = Mockito.mock(Order.class);
         Mockito.when(order.getStatus()).thenReturn(OrderStatus.PENDING);
@@ -181,7 +186,7 @@ class OrderItemServiceImplTest {
         Mockito.when(orderRepository.findById(22L)).thenReturn(Optional.of(order));
         Mockito.when(productRepository.findById(11L)).thenReturn(Optional.of(product));
 
-        OrderItem expectedOrderItem = new OrderItem(null, product, order, 5, 4.0);
+        OrderItem expectedOrderItem = new OrderItem(null, product, order, DEFAULT_QUANTITY, DEFAULT_PRICE);
 
         Mockito.when(orderItemRepository.save(Mockito.any())).thenReturn(expectedOrderItem);
 
@@ -215,7 +220,7 @@ class OrderItemServiceImplTest {
 
         Mockito.when(order.getId()).thenReturn(22L);
 
-        OrderItem orderItem = new OrderItem(1L, product, order, 5, 4.0);
+        OrderItem orderItem = new OrderItem(1L, product, order, DEFAULT_QUANTITY, DEFAULT_PRICE);
 
         Mockito.when(orderItemRepository.getOrderItemById(1L)).thenReturn(Optional.of(orderItem));
         Mockito.when(orderRepository.findById(22L)).thenReturn(Optional.empty());
@@ -236,7 +241,7 @@ class OrderItemServiceImplTest {
         Mockito.when(order.getId()).thenReturn(22L);
         Mockito.when(order.getStatus()).thenReturn(OrderStatus.DELIVERED);
 
-        OrderItem orderItem = new OrderItem(1L, product, order, 5, 4.0);
+        OrderItem orderItem = new OrderItem(1L, product, order, DEFAULT_QUANTITY, DEFAULT_PRICE);
 
         Mockito.when(orderItemRepository.getOrderItemById(1L)).thenReturn(Optional.of(orderItem));
         Mockito.when(orderRepository.findById(22L)).thenReturn(Optional.of(order));
@@ -258,7 +263,7 @@ class OrderItemServiceImplTest {
         Mockito.when(order.getId()).thenReturn(22L);
         Mockito.when(order.getStatus()).thenReturn(OrderStatus.PENDING);
 
-        OrderItem orderItem = new OrderItem(1L, product, order, 5, 4.0);
+        OrderItem orderItem = new OrderItem(1L, product, order, DEFAULT_QUANTITY, DEFAULT_PRICE);
 
         Mockito.when(orderItemRepository.getOrderItemById(1L)).thenReturn(Optional.of(orderItem));
         Mockito.when(orderRepository.findById(22L)).thenReturn(Optional.of(order));
@@ -282,7 +287,7 @@ class OrderItemServiceImplTest {
         Mockito.when(order.getId()).thenReturn(22L);
         Mockito.when(order.getStatus()).thenReturn(OrderStatus.PENDING);
 
-        OrderItem orderItem = new OrderItem(1L, product, order, 5, 4.0);
+        OrderItem orderItem = new OrderItem(1L, product, order, DEFAULT_QUANTITY, DEFAULT_PRICE);
 
         Mockito.when(orderItemRepository.getOrderItemById(1L)).thenReturn(Optional.of(orderItem));
         Mockito.when(orderRepository.findById(22L)).thenReturn(Optional.of(order));
@@ -306,13 +311,13 @@ class OrderItemServiceImplTest {
         Mockito.when(order.getId()).thenReturn(22L);
         Mockito.when(order.getStatus()).thenReturn(OrderStatus.PENDING);
 
-        OrderItem orderItem = new OrderItem(1L, product, order, 5, 4.0);
+        OrderItem orderItem = new OrderItem(1L, product, order, DEFAULT_QUANTITY, DEFAULT_PRICE);
 
         Mockito.when(orderItemRepository.getOrderItemById(1L)).thenReturn(Optional.of(orderItem));
         Mockito.when(orderRepository.findById(22L)).thenReturn(Optional.of(order));
         Mockito.when(productRepository.findById(11L)).thenReturn(Optional.of(product));
 
-        OrderItem expectedOrderItem = new OrderItem(1L, product, order, 10, 4.0);
+        OrderItem expectedOrderItem = new OrderItem(1L, product, order, 10, DEFAULT_PRICE);
 
         Mockito.when(orderItemRepository.save(Mockito.any())).thenReturn(expectedOrderItem);
 
@@ -344,7 +349,7 @@ class OrderItemServiceImplTest {
 
         Mockito.when(order.getId()).thenReturn(22L);
 
-        OrderItem orderItem = new OrderItem(1L, product, order, 5, 4.0);
+        OrderItem orderItem = new OrderItem(1L, product, order, DEFAULT_QUANTITY, DEFAULT_PRICE);
 
         Mockito.when(orderItemRepository.getOrderItemById(1L)).thenReturn(Optional.of(orderItem));
         Mockito.when(orderRepository.findById(22L)).thenReturn(Optional.empty());
@@ -364,7 +369,7 @@ class OrderItemServiceImplTest {
         Mockito.when(order.getId()).thenReturn(22L);
         Mockito.when(order.getStatus()).thenReturn(OrderStatus.DELIVERED);
 
-        OrderItem orderItem = new OrderItem(1L, product, order, 5, 4.0);
+        OrderItem orderItem = new OrderItem(1L, product, order, DEFAULT_QUANTITY, DEFAULT_PRICE);
 
         Mockito.when(orderItemRepository.getOrderItemById(1L)).thenReturn(Optional.of(orderItem));
         Mockito.when(orderRepository.findById(22L)).thenReturn(Optional.of(order));
@@ -384,7 +389,7 @@ class OrderItemServiceImplTest {
         Mockito.when(order.getId()).thenReturn(22L);
         Mockito.when(order.getStatus()).thenReturn(OrderStatus.PENDING);
 
-        OrderItem orderItem = new OrderItem(1L, product, order, 5, 4.0);
+        OrderItem orderItem = new OrderItem(1L, product, order, DEFAULT_QUANTITY, DEFAULT_PRICE);
 
         Mockito.when(orderItemRepository.getOrderItemById(1L)).thenReturn(Optional.of(orderItem));
         Mockito.when(orderRepository.findById(22L)).thenReturn(Optional.of(order));

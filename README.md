@@ -59,7 +59,6 @@ Running the app locally the API documentation is available at [http://localhost:
 
 ## Future Improvements (Sorting by priority)
 
-* Create the `database schema` on container initialization using `.sql` scripts .
 * Create integration tests using [Testcontainers](https://testcontainers.com/).
 * Add more unit tests for the mappers.
 
